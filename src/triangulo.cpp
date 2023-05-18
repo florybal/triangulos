@@ -4,13 +4,11 @@
 #include <string>
 
 int main()
-{
-   // y -y1/ yb - ya = x - x1/ x2 - x1 
-
+{ 
+    //variaveis
     bool triangulo;
     double DAC, DBC, DAB;
     float Ax, Ay, Bx,  By, Cx, Cy;
-    //std::string x, y;
     
     //coordenadas em pixels na tela
     std::cout << "De as coordenadas do triangulo \n A:" << std::endl;
@@ -20,31 +18,28 @@ int main()
     std::cout << "C" << std::endl;
     std::cin >> Cx >> Cy;
 
-    //tem que fazer a distancia de AB, AC, CBS
+    //distancias dos pontos AB, AC, CBS
     DAC = sqrt(pow(Ax-Cx,2) +  pow(Ay-Cy,2) ); //a
     DBC = sqrt(pow(Bx-Cx,2) +  pow(By-Cy,2) ); //b
     DAB = sqrt(pow(Ax-Bx,2) +  pow(Ay-By,2) ); //c
 
     std::cout<<"Equações da reta: "<<std::endl;
 
-    // equação da reta A pelo seguemento AB = C
-    std::cout << (Bx - Ax)*(Ay)<<"y"
-    << - (By - Ay)*(Ax)<<"x" <<std::endl; 
-    
-    //equação da reta BC = B 
-    std::cout<< (Cx - Bx)*(- By)<<"y" 
-    << - (Cy - By)*(Cx) << "x" <<std::endl;
+    // y -y1/ yb - ya = x - x1/ x2 - x1
 
     // equação da reta A pelo seguemento AC = A
-    std::cout << (Cx - Ax)*(Ay) <<  "y"
+    std::cout << "A:" <<std::endl << (Cx - Ax)*(Ay) <<  "y"
     << - (Cy - Ay)*(Cx) << "x" <<std::endl;
 
-    //auto Rbc = (Cx - Bx)*(y - By) - (Cy - By)*(x - Cx); // equação da reta A pelo seguemento BC = B
+    //equação da reta BC = B 
+    std::cout << "B:" <<std::endl<< (Cx - Bx)*(- By)<<"y" 
+    << - (Cy - By)*(Cx) << "x" <<std::endl;
 
-    //std::cout << Rac <<std::endl << Rbc <<std::endl <<Rab <<std::endl; 
-    
-    //std::cout << Rac + Rac1 <<std::endl;
+    // equação da reta A pelo seguemento AB = C
+    std::cout << "C:" <<std::endl << (Bx - Ax)*(Ay)<<"y"
+    << - (By - Ay)*(Ax)<<"x" <<std::endl; 
 
+    //condição de existencia para ser triangulos
     if((DAB + DBC > DAC) && (DAC + DAB > DBC) && (DBC + DAB > DAC))
     {
         triangulo = true;
@@ -52,31 +47,28 @@ int main()
         triangulo = false;
     }
 
+    //mostrando as distancias calculadas
     std::cout <<"A: " << DAC << std::endl;
     std::cout <<"B: " << DBC << std::endl;
     std::cout <<"C: " << DAB << std::endl;
     std::cout << triangulo << std::endl;
 
-    // set its texture coordinates
-    //vertex.texCoords = sf::Vector2f(100.f, 100.f);
+    //instanciando o tamanho de um vetor do tipo triangulo
     sf::VertexArray triangle(sf::Triangles, 3);
 
-    // define the position of the triangle's points
+    //definindo sua posição no plano
     triangle[0].position = sf::Vector2f(Ax, Ay);
     triangle[1].position = sf::Vector2f(Bx, By);
     triangle[2].position = sf::Vector2f(Cx, Cy);
 
-    // define the color of the triangle's points
+    //cor
     triangle[0].color = sf::Color::Red;
     triangle[1].color = sf::Color::Blue;
     triangle[2].color = sf::Color::Green;
 
-    // no texture coordinates here, we'll see that later
-
-    // create the window
+    //criando a janela
     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
 
-    // run the program as long as the window is open
     while (window.isOpen())
     {
         // check all the window's events that were triggered since the last iteration of the loop
