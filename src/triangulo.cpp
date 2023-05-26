@@ -9,7 +9,13 @@ int main()
     bool triangulo;
     double DAC, DBC, DAB;
     float Ax, Ay, Bx,  By, Cx, Cy;
-    
+    float baricentro_x, baricentro_y;
+    float Mac, Mab, Mbc;
+    float Pab_x, Pab_y, Pac_x, Pac_y, Pbc_x, Pbc_y;
+
+    //condição para ser um triangulo
+    auto condição = (DAB + DBC > DAC) && (DAC + DAB > DBC) && (DBC + DAB > DAC);
+
     //coordenadas em pixels na tela
     std::cout << "De as coordenadas do triangulo \n A:" << std::endl;
     std::cin >> Ax >> Ay;
@@ -18,10 +24,34 @@ int main()
     std::cout << "C" << std::endl;
     std::cin >> Cx >> Cy;
 
-    //distancias dos pontos AB, AC, CBS
+    //distancias dos pontos AB, AC, CB
     DAC = sqrt(pow(Ax-Cx,2) +  pow(Ay-Cy,2) ); //a
     DBC = sqrt(pow(Bx-Cx,2) +  pow(By-Cy,2) ); //b
     DAB = sqrt(pow(Ax-Bx,2) +  pow(Ay-By,2) ); //c
+
+    //mediatrizes
+    Mac = DAC / 2; //a
+    Mbc = DBC / 2; //b
+    Mab = DAB / 2; //c
+
+    //ponto médio 
+    Pac_x = Ax + Cx / 2; //reta a
+    Pac_y = Ay + Cy / 2;
+
+    Pbc_y = By + Cy / 2; //reta b
+    Pbc_x = Bx + Cx / 2;
+
+    Pab_x = Ax + Bx / 2; //reta c
+    Pab_y = Ay + By / 2;
+
+    //mediana
+    
+
+
+
+    //baricentro
+    baricentro_x = Ax + Bx + Cx /3; 
+    baricentro_y = Ay + By + Cy /3;
 
     std::cout<<"Equações da reta: "<<std::endl;
 
@@ -40,7 +70,7 @@ int main()
     << - (By - Ay)*(Ax)<<"x" <<std::endl; 
 
     //condição de existencia para ser triangulos
-    if((DAB + DBC > DAC) && (DAC + DAB > DBC) && (DBC + DAB > DAC))
+    if(condição)
     {
         triangulo = true;
     }else{
