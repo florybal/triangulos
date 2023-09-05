@@ -1,21 +1,93 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <cmath>
-#include <string>
+#include "triangulo.h"
 
-int main()
-{ 
-    //variaveis
-    bool triangulo;
+struct{
+    bool ehTriangulo;
     double DAC, DBC, DAB;
     float Ax, Ay, Bx,  By, Cx, Cy;
     float baricentro_x, baricentro_y;
     float Mac, Mab, Mbc;
     float Pab_x, Pab_y, Pac_x, Pac_y, Pbc_x, Pbc_y;
+}triangulo;
+    
+void triangle::run()
+{   
+    //criando a janela
+    sf::RenderWindow* _window(sf::VideoMode(800, 600), "triangulos");
+    desenha();
+    verificaTriangulo();
+    processEvent();
+}
 
-    //condição para ser um triangulo
-    auto condição = (DAB + DBC > DAC) && (DAC + DAB > DBC) && (DBC + DAB > DAC);
+void triangle::processEvent()
+{
+    while (_window.isOpen())
+    {
+        sf::Event event;
+        while (_window.pollEvent(event))
+        {
+            // "close requested" event: we close the window
+            if ((event.type == sf::Event::Closed) or 
+            (event.type == sf::Event::keyPressing and event.key.code==sf::keyboard::Escape))
+                _window.close();
+        }
 
+        // clear the window with black color
+        _window.clear(sf::Color::Black);
+
+        // draw everything here...
+        _window.draw(triangle);
+
+        // end the current frame
+        _window.display();
+    }
+
+}
+
+void triangle::desenha()
+{
+    //instanciando o tamanho de um vetor do tipo triangulo
+    sf::VertexArray triangle(sf::Triangles, 3);
+
+    //definindo sua posição no plano
+    triangle[0].position = sf::Vector2f(Ax, Ay);
+    triangle[1].position = sf::Vector2f(Bx, By);
+    triangle[2].position = sf::Vector2f(Cx, Cy);
+
+    //cor
+    triangle[0].color = sf::Color::Red;
+    triangle[1].color = sf::Color::Blue;
+    triangle[2].color = sf::Color::Green;
+
+}
+void triangle::distance()
+{
+    //distancias dos pontos AB, AC, CB
+    DAC = sqrt(pow(Ax-Cx,2) +  pow(Ay-Cy,2) ); //a
+    DBC = sqrt(pow(Bx-Cx,2) +  pow(By-Cy,2) ); //b
+    DAB = sqrt(pow(Ax-Bx,2) +  pow(Ay-By,2) ); //c
+
+    //mostrando as distancias calculadas
+    std::cout <<"A: " << DAC << std::endl;
+    std::cout <<"B: " << DBC << std::endl;
+    std::cout <<"C: " << DAB << std::endl;
+    std::cout << triangulo << std::endl;
+
+}
+void triangle::mediatriz()
+{
+    Mac = DAC / 2; //a
+    Mbc = DBC / 2; //b
+    Mab = DAB / 2; //c
+}
+
+void triangle::baricentro()
+{
+    baricentro_x = Ax + Bx + Cx /3; 
+    baricentro_y = Ay + By + Cy /3;
+}
+
+bool triangle::triangulo()
+{
     //coordenadas em pixels na tela
     std::cout << "De as coordenadas do triangulo \n A:" << std::endl;
     std::cin >> Ax >> Ay;
@@ -24,17 +96,15 @@ int main()
     std::cout << "C" << std::endl;
     std::cin >> Cx >> Cy;
 
-    //distancias dos pontos AB, AC, CB
-    DAC = sqrt(pow(Ax-Cx,2) +  pow(Ay-Cy,2) ); //a
-    DBC = sqrt(pow(Bx-Cx,2) +  pow(By-Cy,2) ); //b
-    DAB = sqrt(pow(Ax-Bx,2) +  pow(Ay-By,2) ); //c
+    //condição para ser um triangulo
+    auto condicao = (DAB + DBC > DAC) && (DAC + DAB > DBC) && (DBC + DAB > DAC);
 
-    //mediatrizes
-    Mac = DAC / 2; //a
-    Mbc = DBC / 2; //b
-    Mab = DAB / 2; //c
+    if(!condicao)
+        ehTriangulo = false;
+}
 
-    //ponto médio 
+void triangle::ponto_med()
+{
     Pac_x = Ax + Cx / 2; //reta a
     Pac_y = Ay + Cy / 2;
 
@@ -44,15 +114,10 @@ int main()
     Pab_x = Ax + Bx / 2; //reta c
     Pab_y = Ay + By / 2;
 
-    //mediana
-    
+}
 
-
-
-    //baricentro
-    baricentro_x = Ax + Bx + Cx /3; 
-    baricentro_y = Ay + By + Cy /3;
-
+void triangle::equacoes()
+{
     std::cout<<"Equações da reta: "<<std::endl;
 
     // y -y1/ yb - ya = x - x1/ x2 - x1
@@ -68,58 +133,5 @@ int main()
     // equação da reta A pelo seguemento AB = C
     std::cout << "C:" <<std::endl << (Bx - Ax)*(Ay)<<"y"
     << - (By - Ay)*(Ax)<<"x" <<std::endl; 
-
-    //condição de existencia para ser triangulos
-    if(condição)
-    {
-        triangulo = true;
-    }else{
-        triangulo = false;
-    }
-
-    //mostrando as distancias calculadas
-    std::cout <<"A: " << DAC << std::endl;
-    std::cout <<"B: " << DBC << std::endl;
-    std::cout <<"C: " << DAB << std::endl;
-    std::cout << triangulo << std::endl;
-
-    //instanciando o tamanho de um vetor do tipo triangulo
-    sf::VertexArray triangle(sf::Triangles, 3);
-
-    //definindo sua posição no plano
-    triangle[0].position = sf::Vector2f(Ax, Ay);
-    triangle[1].position = sf::Vector2f(Bx, By);
-    triangle[2].position = sf::Vector2f(Cx, Cy);
-
-    //cor
-    triangle[0].color = sf::Color::Red;
-    triangle[1].color = sf::Color::Blue;
-    triangle[2].color = sf::Color::Green;
-
-    //criando a janela
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
-
-    while (window.isOpen())
-    {
-        // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        // clear the window with black color
-        window.clear(sf::Color::Black);
-
-        // draw everything here...
-        window.draw(triangle);
-
-        // end the current frame
-        window.display();
-    }
-
-    return 0;
-
+    
 }

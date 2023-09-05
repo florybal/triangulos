@@ -7,19 +7,22 @@
 
 class triangle
 {
+    
     public:
+        triangle();
+        ~triangle();
 
-
-    private:
-        sf::RenderWindow* _window;
+        void run();
     private:
         void desenha();
+        void processEvent();
 
-
-        Mediatriz();
-        ponto_med();
-        bool triangulo();
-        Mediana();
-        baricentro();
+        void mediatriz();
+        void ponto_med();
+        bool verificaTriangulo();
+        void Mediana();
+        void baricentro();
+        void distance();
+        void equacoes();
 
 };
